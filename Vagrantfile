@@ -4,8 +4,9 @@
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
-# you're doing.
-Vagrant.configure('2') do |config|
+# you're doing
+VAGRANTFILE_API_VERSION = '2'
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -23,6 +24,7 @@ Vagrant.configure('2') do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network :forwarded_port, guest: 9200, host: 9201
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -56,10 +58,7 @@ Vagrant.configure('2') do |config|
 
   config.vm.provision 'docker' do |d|
     d.pull_images 'elasticsearch'
-    # d.pull_images 'logstash'
-    # d.pull_images 'kibana'
-
-    d.run 'elasticsearch', image: 'elasticsearch'
+    d.run 'elasticsearch', image: 'elasticsearch', args: "-d --restart='always' --name='elastic' -p 9200:9200 -p 9300:9300"
   end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
