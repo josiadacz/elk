@@ -45,20 +45,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
+  config.vm.provider 'virtualbox' do |vb|
+    vb.memory = '4096'
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.
 
+  config.vm.provision 'shell', path: 'script.sh'
+
   config.vm.provision 'docker' do |d|
     d.pull_images 'elasticsearch'
-    d.run 'elasticsearch', image: 'elasticsearch', args: "-d --restart='always' --name='elastic' -p 9200:9200 -p 9300:9300"
+    d.run 'elasticsearch', image: 'elasticsearch', args: "-d --restart='always' --name='elastic01' -p 9200:9200"
   end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
@@ -71,8 +69,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+
 end
