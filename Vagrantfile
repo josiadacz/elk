@@ -52,6 +52,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # View the documentation for the provider you are using for more
   # information on available options.
 
+  config.vm.provision 'file', source: 'config', destination: '/tmp'
   config.vm.provision 'shell', path: 'script.sh'
 
   config.vm.provision 'docker' do |d|
