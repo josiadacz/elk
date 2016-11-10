@@ -57,7 +57,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision 'docker' do |d|
     d.pull_images 'elasticsearch'
+    d.pull_images 'logstash'
+    d.pull_images 'kibana'
     d.run 'elasticsearch', image: 'elasticsearch', args: "-d --restart='always' --name='elastic01' -p 9200:9200"
+
+    # d.run 'logstash', image: 'logstash', args: "-it --rm -v $PWD:/config-dir logstash -f /config-dir/logstash.conf"
+    # docker run -it --rm -v "$PWD":/config-dir logstash -f /config-dir/logstash.conf
   end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
