@@ -1,1 +1,1 @@
-sudo cp /tmp/config/sysctl.conf /etc/sysctl.conf
+sudo sysctl -w vm.max_map_count=262144
