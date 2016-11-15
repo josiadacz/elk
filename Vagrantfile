@@ -55,14 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     d.pull_images 'logstash'
     d.pull_images 'kibana'
     d.run 'elasticsearch', image: 'elasticsearch', args: '-d --restart always --name elastic01 -p 9200:9200'
-    d.run 'logstash', image: 'logstash', args: '-d -it --name logstash01 -p 5044:5044 --link elastic01 -v /vagrant/config:/config'
-    # docker run -d -it --name logstash01 -p 5044:5044 --link elastic01 -v /vagrant/config:/config logstash logstash -f /config/logstash.conf
-
-    # d.run 'logstash', image: 'logstash', args: "-it --rm -v $PWD:/config-dir logstash -f /config-dir/logstash.conf"
-    # docker run -it --rm -v "$PWD":/config-dir logstash -f /config-dir/logstash.conf
-
-    # d.run 'kibana', image: 'kibana', args: '-d --name kibana01 -p 5601:5601 --link elastic01'
-    d.run 'kibana', image: 'kibana', args: '-d --name kibana01 -p 5601:5601 -e ELASTICSEARCH_URL=http://localhost:9200'
-    # docker run -p 5601:5601 --link elastic01 -d --name kibana01 -e ELASTICSEARCH_URL=http://localhost:9200
+    d.run 'logstash', image: 'logstash', args: '-d -it --name logstash01 -p 5044:5044 --link elastic01:elasticsearch -v /vagrant/config:/config'
+    d.run 'kibana', image: 'kibana', args: '-d --name kibana01 -p 5601:5601 --link elastic01:elasticsearch'
   end
 end
