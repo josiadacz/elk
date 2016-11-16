@@ -1,3 +1,4 @@
+require 'vagrant-aws'
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -13,7 +14,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = 'ubuntu/xenial64'
+  # config.vm.box = 'ubuntu/xenial64'
+  config.vm.box = 'aws-dummy'
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -45,6 +47,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider 'virtualbox' do |vb|
     vb.memory = '4096'
+  end
+
+  config.vm.provider 'aws' do |aws, override|
+    # Read AWS authentication information from environment variables
+    aws.access_key_id = ENV['AWS_ACCESS_KEY_ID']
+    aws.secret_access_key = ENV['AWS_SECRET_ACCESS_KEY']
+
+    # Specify SSH keypair to use
+    aws.keypair_name = 'ssh-keypair-name'
+
+    # Specify region, AMI ID, and security group(s)
+    aws.region = 'us-west-2'
+    aws.ami = 'ami-20be7540'
+    aws.security_groups = ['default']
+
+    # Specify username and private key path
+    override.ssh.username = 'ubuntu'
+    override.ssh.private_key_path = '~/.ssh/ssh-keypair-file'
   end
 
   config.vm.provision 'file', source: 'config', destination: '/tmp'
